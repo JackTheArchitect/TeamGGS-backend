@@ -3,11 +3,34 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+
+
+// connecting to mongo
+// mongoose.connect(process.env.connectionString)
+//   .then(() => console.log('connected to mongodb...'))
+//   .catch(err => console.log(err))
+    // For Test!!!
+let config = require('./config');
+    // Connect to the Database (My Database: JaeukDB)
+mongoose.connect(config.mongodbUri)
+  .then(() => console.log('connected to mongodb...'))
+  .catch(err => console.log(err))
+
+
+let mongoDB = mongoose.connection;
+mongoDB.on('error', console.error.bind(console, 'Connection Error:'));
+mongoDB.once('open', ()=>{
+  console.log('Connected to MongoDB...');
+});
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
