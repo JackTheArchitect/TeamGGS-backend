@@ -56,10 +56,10 @@ userSchema.methods.verify = function (password) {
 };
 
 
-// finds a user document in the database by using username 
-userSchema.statics.findOneByUsername = function(username) {
+// finds a user document in the database by using username .. UserId????
+userSchema.statics.findOneByUsername = function(userId) {
     return this.findOne({
-        username        
+        userId        
     }).exec()
 }
 
