@@ -4,39 +4,49 @@ const crypto = require('crypto')
 const config = require('../config')
 
 const userSchema = new Schema({
-    userId: {
-        type : String,
-        required : true,
-        maxlength: 40
+    // userId: {
+    //     type : String,
+    //     required : true,
+    //     maxlength: 40
+    // },
+    email: {
+        type: String,
+        required: true,
+        maxlength: 255
     },
     password: {
         type: String,
         required: true,
         minlength: 8
     },
-    userName: {
+    firstName: {
         type: String,
         required: true,
         maxlength: 255
-    },        
-    email: {
+    },
+    lastName: {
         type: String,
         required: true,
         maxlength: 255
     }
+    // userName: {
+    //     type: String,
+    //     required: true,
+    //     maxlength: 255
+    // },        
 })
 
 // create new User document
-userSchema.statics.create = function(userId, password, userName, email) {
+userSchema.statics.create = function(email, password, firstName, lastName) {
     // encrypt the password
     const encrypted = crypto.createHmac('sha1', config.pwSecret)
                       .update(password)
                       .digest('base64')
     const user = new this({
-        userId, 
+        email, 
         password: encrypted, 
-        userName,         
-        email        
+        firstName,         
+        lastName        
     })
 
     // a new user document is saved to the database
@@ -56,10 +66,10 @@ userSchema.methods.verify = function (password) {
 };
 
 
-// finds a user document in the database by using username .. UserId????
-userSchema.statics.findOneByUsername = function(userId) {
+// finds a user document in the database by using email 
+userSchema.statics.findOneByEmail = function(email) {
     return this.findOne({
-        userId        
+        email        
     }).exec()
 }
 
@@ -80,7 +90,7 @@ userSchema.statics.updateOne = function(userName, email) {
 
     // User's new profile is updated to the database
     return user.save()
-}
+}  // ??
 
 
 const userModel = mongoose.model('user', userSchema)
