@@ -14,14 +14,14 @@ exports.getAllUsers = (req, res) => {
 }
 
 exports.singup = (req, res) => {
-    const { userId, password,userName,email} = req.body    
+    const { email, password, firstName ,lastName } = req.body    
 
     // create a new user if does not exist
     const create = (user) => {
         if(user) {
             throw new Error('userId exists')
         } else {
-            return userModel.create(userId, password,userName,email)
+            return userModel.create(email, password, firstName ,lastName)
         }
     }    
 
@@ -49,7 +49,7 @@ exports.singup = (req, res) => {
 
 
 exports.signin = (req, res) => {
-    const userId = req.body.userId;
+    const email = req.body.email;
     const password = req.body.password;    
 
     // check the user info & generate the jwt
@@ -57,7 +57,7 @@ exports.signin = (req, res) => {
     const check = (user) => {
         if(!user) {
             // user does not exist
-            throw new Error('signin failed: Such userId doesnt exist')
+            throw new Error('signin failed: Such email doesnt exist')
         } else {
             // user exists, check the password            
             if(user.verify(password)) {
@@ -66,13 +66,13 @@ exports.signin = (req, res) => {
                     jwt.sign(
                         {
                             _id: user._id, 
-                            userId: user.userId,
-                            userName: user.userName                            
+                            // userId: user.userId,
+                            email: user.email                            
                         }, 
                         config.secret,
                         {
                             expiresIn: '1d',
-                            issuer: 'Group3'
+                            issuer: 'Group3' // ??
                         },
                         (err, token) => {
                             if (err) reject(err)
@@ -165,7 +165,7 @@ exports.getProfile = async (req, res) => {
                 "firstName": user.firstName,
                 "lastName": user.lastName,
                 "email": user.email,
-                "admin" : user.admin
+                "admin" : user.admin // ??
             })
         } else {
             throw new Error('Error!')
