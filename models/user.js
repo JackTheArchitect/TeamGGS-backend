@@ -4,11 +4,6 @@ const crypto = require('crypto')
 const config = require('../config')
 
 const userSchema = new Schema({
-    // userId: {
-    //     type : String,
-    //     required : true,
-    //     maxlength: 40
-    // },
     email: {
         type: String,
         required: true,
@@ -29,11 +24,7 @@ const userSchema = new Schema({
         required: true,
         maxlength: 255
     }
-    // userName: {
-    //     type: String,
-    //     required: true,
-    //     maxlength: 255
-    // },        
+     
 })
 
 // create new User document

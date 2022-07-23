@@ -40,7 +40,7 @@ exports.singup = (req, res) => {
     }
 
     // check username duplication
-    userModel.findOneByUsername(userId)
+    userModel.findOneByEmail(email)
     .then(create)    
     .then(respond)
     .catch(onError)
@@ -102,7 +102,7 @@ exports.signin = (req, res) => {
     }
 
     // find the user
-    userModel.findOneByUsername(userId)
+    userModel.findOneByEmail(email)
     .then(check)
     .then(respond)
     .catch(onError)
@@ -172,7 +172,7 @@ exports.getProfile = async (req, res) => {
         }
     }  
 
-    userModel.findOneByUsername(username)
+    userModel.findOneByEmail(email)
     .then(display)    
 }
 
@@ -217,7 +217,7 @@ exports.updateProfile = async (req, res) => {
         })
     }    
     
-    userModel.findOneByUsername(username)
+    userModel.findOneByEmail(email)
     .then(update)
     .then(respond)
     .then(onError)        
