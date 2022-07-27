@@ -3,6 +3,10 @@ const Schema = mongoose.Schema
 const crypto = require('crypto')
 const config = require('../config')
 
+const jwt = require("jsonwebtoken");
+const Joi = require("joi");
+const passwordComplexity = require("joi-password-complexity");
+
 const userSchema = new Schema({
     email: {
         type: String,
@@ -81,8 +85,28 @@ userSchema.statics.updateOne = function(userName, email) {
 
     // User's new profile is updated to the database
     return user.save()
-}  // ??
+} 
 
+ 
+userSchema.methods.generateAuthToken = function () {
+	const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
+		expiresIn: "7d",
+	});
+	console.log('Logged user id: '+ this._id);
+	return token;
+};
 
 const userModel = mongoose.model('user', userSchema)
+
+const validate = (data) => {
+	const schema = Joi.object({
+		firstName: Joi.string().required().label("First Name"),
+		lastName: Joi.string().required().label("Last Name"),
+		email: Joi.string().email().required().label("Email"),
+		password: passwordComplexity().required().label("Password"),
+	});
+	return schema.validate(data);
+};
+
+
 module.exports = userModel
