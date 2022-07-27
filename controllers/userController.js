@@ -1,4 +1,4 @@
-const userModel = require('../models/user')
+const {userModel} = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../config'); // needs to be hidden
 
@@ -40,7 +40,7 @@ exports.singup = (req, res) => {
     }
 
     // check username duplication
-    userModel.findOneByUsername(userId)
+    userModel.findOneByEmail(email)
     .then(create)    
     .then(respond)
     .catch(onError)
@@ -102,7 +102,7 @@ exports.signin = (req, res) => {
     }
 
     // find the user
-    userModel.findOneByUsername(userId)
+    userModel.findOne({ email: req.body.email })
     .then(check)
     .then(respond)
     .catch(onError)
@@ -165,14 +165,14 @@ exports.getProfile = async (req, res) => {
                 "firstName": user.firstName,
                 "lastName": user.lastName,
                 "email": user.email,
-                "admin" : user.admin // ??
+                "admin" : user.admin 
             })
         } else {
             throw new Error('Error!')
         }
     }  
 
-    userModel.findOneByUsername(username)
+    userModel.findOneByEmail(email)
     .then(display)    
 }
 
@@ -217,7 +217,7 @@ exports.updateProfile = async (req, res) => {
         })
     }    
     
-    userModel.findOneByUsername(username)
+    userModel.findOneByEmail(email)
     .then(update)
     .then(respond)
     .then(onError)        
