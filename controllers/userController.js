@@ -1,4 +1,4 @@
-const userModel = require('../models/user')
+const {userModel} = require('../models/user')
 const jwt = require('jsonwebtoken')
 const config = require('../config'); // needs to be hidden
 
@@ -102,7 +102,7 @@ exports.signin = (req, res) => {
     }
 
     // find the user
-    userModel.findOneByEmail(email)
+    userModel.findOne({ email: req.body.email })
     .then(check)
     .then(respond)
     .catch(onError)
@@ -165,7 +165,7 @@ exports.getProfile = async (req, res) => {
                 "firstName": user.firstName,
                 "lastName": user.lastName,
                 "email": user.email,
-                "admin" : user.admin // ??
+                "admin" : user.admin 
             })
         } else {
             throw new Error('Error!')
